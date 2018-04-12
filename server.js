@@ -1,5 +1,5 @@
 var express = require("express");
-var bodyparser = require("body-parser");
+var bodyParser = require("body-parser");
 var path = require("path");
 var mysql = require("mysql");
 
@@ -16,12 +16,24 @@ var PORT = process.env.PORT || 8080;
 // });
 
 
-app.get('/', function(req, res) {
-    res.send('I am listening');
-  });
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 
+
+
+app.get("/", function(req, res){
+    res.sendFile(path.join(__dirname, "./public/home.html"));
+});
+
+app.get("/survey", function(req, res){
+    res.sendFile(path.join(__dirname, "./public/survey.html"));
+});
+
+
+require("./routing/apiRoutes")(app);
+require("./routing/htmlRoutes")(app);
 
 app.listen(PORT, function () {
     // Log (server-side) when our server has started
